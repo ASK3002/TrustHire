@@ -14,12 +14,12 @@ import {
 import { initializeApp, getApps } from 'firebase/app'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBLZqmndUXy-GIarRKixt6U2jykNVQM4Uo",
-  authDomain: "trusthire-a1.firebaseapp.com",
-  projectId: "trusthire-a1",
-  storageBucket: "trusthire-a1.firebasestorage.app",
-  messagingSenderId: "863713698989",
-  appId: "1:863713698989:web:7a1c9e2b73fd3820231224",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 }
 
 interface AuthContextType {
