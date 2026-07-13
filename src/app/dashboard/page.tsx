@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Navbar } from '@/components/Navbar'
 import { Users, ShieldCheck, Mail, Github, Trophy, CheckCircle, XCircle, Clock } from 'lucide-react'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 export default function DashboardPage() {
   const [view, setView] = useState<'resume' | 'work-auth' | null>(null)
@@ -83,9 +84,10 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <Navbar />
-      <div className="max-w-7xl mx-auto px-4 py-12">
+    <ProtectedRoute>
+      <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+        <Navbar />
+        <div className="max-w-7xl mx-auto px-4 py-12">
         {!view ? (
           <div className="text-center">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Dashboard</h1>
@@ -239,5 +241,6 @@ export default function DashboardPage() {
         )}
       </div>
     </main>
+    </ProtectedRoute>
   )
 }
