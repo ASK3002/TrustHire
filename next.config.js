@@ -5,6 +5,7 @@ const nextConfig = {
       bodySizeLimit: '50mb',
     },
   },
+  transpilePackages: ['firebase'],
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
