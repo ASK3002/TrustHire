@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { trustEngine } from '@/lib/trustEngine'
 import connectDB from '@/lib/mongodb'
 import Resume from '@/models/Resume'
-import TrustScore from '@/models/TrustScore'
+import TrustScore, { Verdict } from '@/models/TrustScore'
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,12 +19,14 @@ export async function POST(req: NextRequest) {
     }
 
     const resume = await Resume.findOne({ resumeId })
+
     if (!resume) {
       return NextResponse.json(
         { success: false, error: 'Resume not found' },
         { status: 404 }
       )
     }
+
 
     const trustScore = await trustEngine.analyzeCandidateProfile(
       resume.text,
@@ -33,10 +35,14 @@ export async function POST(req: NextRequest) {
       codeforcesHandle || resume.codeforcesHandle
     )
 
+
     const savedScore = await TrustScore.create({
       resumeId,
       trustScore: trustScore.trustScore,
-      verdict: trustScore.verdict,
+
+      // Fix TypeScript enum mismatch
+      verdict: trustScore.verdict as Verdict,
+
       breakdown: trustScore.breakdown,
       flags: trustScore.flags,
       explanation: trustScore.explanation,
@@ -49,7 +55,7 @@ export async function POST(req: NextRequest) {
       analyzedAt: new Date(),
     })
 
-    // Update Resume with summary and score
+
     await Resume.findOneAndUpdate(
       { resumeId },
       {
@@ -59,13 +65,17 @@ export async function POST(req: NextRequest) {
       }
     )
 
+
     return NextResponse.json({
       success: true,
       data: trustScore,
       storageId: savedScore._id,
     })
+
+
   } catch (error) {
     console.error('Analysis error:', error)
+
     return NextResponse.json(
       { success: false, error: 'Failed to analyze candidate' },
       { status: 500 }
