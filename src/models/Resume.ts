@@ -1,6 +1,31 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema, Document } from 'mongoose'
 
-const ResumeSchema = new mongoose.Schema({
+export interface IResume extends Document {
+  resumeId: string
+  text: string
+  contactInfo?: {
+    email?: string
+    phone?: string
+    linkedin?: string
+    cfClaimedRank?: string
+  }
+  sections?: {
+    skills?: string
+    experience?: string
+    education?: string
+    projects?: string
+    certifications?: string
+  }
+  githubUsername?: string | null
+  codeforcesHandle?: string | null
+  selectedSkills?: string[]
+  parsedAt?: Date
+  aiSummary?: string | null
+  trustScore?: number | null
+  verdict?: string | null
+}
+
+const ResumeSchema = new Schema<IResume>({
   resumeId: {
     type: String,
     required: true,
@@ -55,4 +80,4 @@ const ResumeSchema = new mongoose.Schema({
   timestamps: true
 })
 
-export default mongoose.models.Resume || mongoose.model('Resume', ResumeSchema)
+export default mongoose.models.Resume || mongoose.model<IResume>('Resume', ResumeSchema)
